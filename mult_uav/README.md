@@ -1,6 +1,6 @@
 # UAV Map Construction Sharing
 
-This package presents the software solution for simulating search and task execution applications using multiple UAVs. In the proposed scenario, marks are placed on the ground where the UAVs searchers perform a search mission to identify them and then assign the tasks to the UAVs workers, responsible for performing these identified tasks.
+This package presents the software solution for generating and sharing dynamic maps between UAVs and server.
 
 ## Installing dependencies
 
