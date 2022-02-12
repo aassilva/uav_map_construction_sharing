@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(multi_uav_se_mission)
+project(multi_uav_map_construction)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -107,7 +107,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES multi_uav_se_mission
+#  LIBRARIES multi_uav_map_construction
   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
@@ -211,7 +211,7 @@ target_link_libraries(worker_manual_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${O
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_multi_uav_se_mission.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_multi_uav_map_construction.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

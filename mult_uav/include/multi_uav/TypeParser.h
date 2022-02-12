@@ -1,9 +1,10 @@
 /*
 @author Maik Basso <maik@maikbasso.com.br>
+@Adapted by Antonio Silva <aassilva@inf.ufrgs.br>
 */
 
-#ifndef MULTI_UAV_SE_MISSION_TYPE_PARSER_H
-#define MULTI_UAV_SE_MISSION_TYPE_PARSER_H
+#ifndef MULTI_UAV_MAP_CONSTRUCTION_TYPE_PARSER_H
+#define MULTI_UAV_MAP_CONSTRUCTION_TYPE_PARSER_H
 
 #include <cstdint>
 #include <cstdlib>
@@ -11,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace multi_uav_se_mission{
+namespace multi_uav_map_construction{
 
 typedef union union_float32_uchar4{
   float float_data;
@@ -43,4 +44,4 @@ class TypeParser {
 
 }
 
-#endif // MULTI_UAV_SE_MISSION_TYPE_PARSER_H
+#endif // MULTI_UAV_MAP_CONSTRUCTION_TYPE_PARSER_H

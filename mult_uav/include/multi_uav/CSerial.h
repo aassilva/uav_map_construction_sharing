@@ -11,7 +11,7 @@
 #include <errno.h>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
 
-namespace multi_uav_se_mission{
+namespace multi_uav_map_construction{
 
 #define SOCKET_MESSAGE_BLOCK_SIZE 10
 #define SOCKET_MESSAGE_BLOCK_SIZE_MIN 4

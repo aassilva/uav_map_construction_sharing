@@ -7,13 +7,13 @@
     <arg name="nodeStartDelay" default="15.0" />
 
     <!-- simulator -->
-    <include file="$(find multi_uav_se_mission)/launch/environment/multi_uav.launch">
+    <include file="$(find multi_uav_map_construction)/launch/environment/multi_uav.launch">
         <arg name="numberUAVs" value="3"/>
         <arg name="worldName" value="lab_experiment_world_1"/>
     </include>
 
     <!-- searcher node -->
-    <node pkg="multi_uav_se_mission" name="searcher_node" type="searcher_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
+    <node pkg="multi_uav_map_construction" name="searcher_node" type="searcher_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
         <param name="uavId" value="0" />
         <param name="missionRadius" value="10.0" />
         <param name="missionStep" value="2.0" />
@@ -28,7 +28,7 @@
     </node>
 
     <!-- worker node -->
-    <node pkg="multi_uav_se_mission" name="worker_1_node" type="worker_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
+    <node pkg="multi_uav_map_construction" name="worker_1_node" type="worker_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
         <param name="uavId" value="1" />
         <param name="altitude" value="5.0" />
         <param name="taskTypes" value="0,1,2" />
@@ -42,7 +42,7 @@
     </node>
 
     <!-- worker node -->
-    <node pkg="multi_uav_se_mission" name="worker_2_node" type="worker_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
+    <node pkg="multi_uav_map_construction" name="worker_2_node" type="worker_node" output="screen" launch-prefix="bash -c 'sleep $(arg nodeStartDelay); $0 $@'">
         <param name="uavId" value="2" />
         <param name="altitude" value="8.0" />
         <param name="taskTypes" value="2,3,4" />
@@ -60,7 +60,7 @@
         pkg="rosbag"
         type="record"
         name="record"
-        args="-o $(find multi_uav_se_mission)/bag/simulation_test_$(arg experimentId) -a -x (.*)/camera(.*)"
+        args="-o $(find multi_uav_map_construction)/bag/simulation_test_$(arg experimentId) -a -x (.*)/camera(.*)"
     />
 
 </launch>

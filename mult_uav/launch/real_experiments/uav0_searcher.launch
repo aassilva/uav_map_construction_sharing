@@ -27,7 +27,7 @@
         <node pkg="rosservice" type="rosservice" name="start_capture" args="call --wait raspicam_node/start_capture"/>
 
         <!-- searcher node -->
-        <node pkg="multi_uav_se_mission" name="searcher_node" type="searcher_node" output="screen">
+        <node pkg="multi_uav_map_construction" name="searcher_node" type="searcher_node" output="screen">
             <param name="uavId" value="0" />
             <param name="missionRadius" value="5.0" />
             <param name="missionStep" value="0.5" />
@@ -42,7 +42,7 @@
         </node>
 
         <!-- rosbag -->
-        <node pkg="rosbag" type="record" name="record" args="-o $(find multi_uav_se_mission)/bag/uav0_$(arg experimentId) -a -x (.*)/camera(.*)"/>
+        <node pkg="rosbag" type="record" name="record" args="-o $(find multi_uav_map_construction)/bag/uav0_$(arg experimentId) -a -x (.*)/camera(.*)"/>
 
     </group>
 

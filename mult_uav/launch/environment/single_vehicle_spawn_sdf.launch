@@ -27,7 +27,7 @@
 
     <!-- generate sdf vehicle model -->
     <!--<arg name="cmd" default="xmlstarlet ed -d '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_tcp_port' -s '//plugin[@name=&quot;mavlink_interface&quot;]' -t elem -n mavlink_tcp_port -v $(arg mavlink_tcp_port) $(find multi_uav)/models/$(arg vehicle)/$(arg vehicle).sdf"/>-->
-    <arg name="cmd" default="xmlstarlet ed -d '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_tcp_port' -s '//plugin[@name=&quot;mavlink_interface&quot;]' -t elem -n mavlink_tcp_port -v $(arg mavlink_tcp_port) -d '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_udp_port' -s '//plugin[@name=&quot;mavlink_interface&quot;]' -t elem -n mavlink_udp_port -v $(arg mavlink_udp_port) $(find multi_uav_se_mission)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
+    <arg name="cmd" default="xmlstarlet ed -d '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_tcp_port' -s '//plugin[@name=&quot;mavlink_interface&quot;]' -t elem -n mavlink_tcp_port -v $(arg mavlink_tcp_port) -d '//plugin[@name=&quot;mavlink_interface&quot;]/mavlink_udp_port' -s '//plugin[@name=&quot;mavlink_interface&quot;]' -t elem -n mavlink_udp_port -v $(arg mavlink_udp_port) $(find multi_uav_map_construction)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
     <param name="model_description" command="$(arg cmd)"/>
     <!-- PX4 SITL -->
     <arg unless="$(arg interactive)" name="px4_command_arg1" value=""/>

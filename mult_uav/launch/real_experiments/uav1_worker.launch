@@ -14,7 +14,7 @@
         </include>
 
         <!-- worker node -->
-        <node pkg="multi_uav_se_mission" name="worker_node" type="worker_node" output="screen">
+        <node pkg="multi_uav_map_construction" name="worker_node" type="worker_node" output="screen">
             <param name="uavId" value="1" />
             <param name="altitude" value="4.0" />
             <param name="taskTypes" value="0,1" />
@@ -28,7 +28,7 @@
         </node>
 
         <!-- rosbag -->
-        <node pkg="rosbag" type="record" name="record" args="-o $(find multi_uav_se_mission)/bag/uav1_$(arg experimentId) -a -x (.*)/camera(.*)"/>
+        <node pkg="rosbag" type="record" name="record" args="-o $(find multi_uav_map_construction)/bag/uav1_$(arg experimentId) -a -x (.*)/camera(.*)"/>
 
     </group>
 

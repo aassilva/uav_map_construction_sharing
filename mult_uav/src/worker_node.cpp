@@ -9,10 +9,10 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <multi_uav/Drone.h>
-#include <multi_uav_se_mission/TypeParser.h>
-#include <multi_uav_se_mission/CSerial.h>
-#include <multi_uav_se_mission/Arrays.h>
-#include <multi_uav_se_mission/WorkerStatistics.h>
+#include <multi_uav_map_construction/TypeParser.h>
+#include <multi_uav_map_construction/CSerial.h>
+#include <multi_uav_map_construction/Arrays.h>
+#include <multi_uav_map_construction/WorkerStatistics.h>
 
 #define MESSAGE_BLOCK_SIZE_BYTES 40
 
@@ -111,7 +111,7 @@ void printFrame(int uavId, std::string msg, std::vector<unsigned char> frame){
   std::stringstream ss;
   ss << "UAV " << uavId << "= " << msg << " ";
   for (int i = 0; i < frame.size(); i++) {
-    int n = (int) multi_uav_se_mission::TypeParser::ucharToInt8t(frame[i]);
+    int n = (int) multi_uav_map_construction::TypeParser::ucharToInt8t(frame[i]);
     ss << n << " ";
   }
   print(ss.str());
@@ -128,7 +128,7 @@ void rosLoop(){
 
 void publishWorkerStatisticsLoop(){
   ros::NodeHandle nh;
-  ros::Publisher statisticsPublisher = nh.advertise<multi_uav_se_mission::WorkerStatistics>("statistics", 1);
+  ros::Publisher statisticsPublisher = nh.advertise<multi_uav_map_construction::WorkerStatistics>("statistics", 1);
   ros::Publisher statisticsTaskArrayPublisher = nh.advertise<std_msgs::String>("statisticsTasks", 1);
 
   // ros loop
@@ -136,7 +136,7 @@ void publishWorkerStatisticsLoop(){
   while (ros::ok()) {
 
     // numerical statistics
-    multi_uav_se_mission::WorkerStatistics msg;
+    multi_uav_map_construction::WorkerStatistics msg;
     msg.numberOfMessagesSent = numberOfMessagesSent;
     msg.numberOfMessagesReceived = numberOfMessagesReceived;
     msg.numberOfTasksReceived = numberOfTasksReceived;
@@ -236,7 +236,7 @@ void taskPerformer(multi_uav::Drone *d, double altitude, int taskAssignAtSeconds
 
 }
 
-void communication(multi_uav_se_mission::CSerial *serial, multi_uav::Drone *d, std::vector<int> taskTypes){
+void communication(multi_uav_map_construction::CSerial *serial, multi_uav::Drone *d, std::vector<int> taskTypes){
 
   while (ros::ok() && serial->isOpened()) {
 
@@ -253,14 +253,14 @@ void communication(multi_uav_se_mission::CSerial *serial, multi_uav::Drone *d, s
     int i = 0;
 
     // start frame byte
-    int8_t frameIdentification = multi_uav_se_mission::TypeParser::ucharToInt8t(frame[i]);
-    i += multi_uav_se_mission::TypeParser::SIZE_INT8_T_BYTES;
+    int8_t frameIdentification = multi_uav_map_construction::TypeParser::ucharToInt8t(frame[i]);
+    i += multi_uav_map_construction::TypeParser::SIZE_INT8_T_BYTES;
 
     if(frameIdentification != (int8_t) -128) continue;
 
     // message type
-    int8_t messageType = multi_uav_se_mission::TypeParser::ucharToInt8t(frame[i]);
-    i += multi_uav_se_mission::TypeParser::SIZE_INT8_T_BYTES;
+    int8_t messageType = multi_uav_map_construction::TypeParser::ucharToInt8t(frame[i]);
+    i += multi_uav_map_construction::TypeParser::SIZE_INT8_T_BYTES;
 
     numberOfMessagesReceived++;
 
@@ -268,31 +268,31 @@ void communication(multi_uav_se_mission::CSerial *serial, multi_uav::Drone *d, s
     if((int) messageType == 0){
 
       //searcher id
-      int searcherId = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int searcherId = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //object id
-      int objectId = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int objectId = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //object type
-      int objectType = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int objectType = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //position
-      float lat = multi_uav_se_mission::TypeParser::ucharArrayToFloat(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES;
-      float lon = multi_uav_se_mission::TypeParser::ucharArrayToFloat(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES;
-      float alt = multi_uav_se_mission::TypeParser::ucharArrayToFloat(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES;
-      float yaw = multi_uav_se_mission::TypeParser::ucharArrayToFloat(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES;
+      float lat = multi_uav_map_construction::TypeParser::ucharArrayToFloat(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES;
+      float lon = multi_uav_map_construction::TypeParser::ucharArrayToFloat(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES;
+      float alt = multi_uav_map_construction::TypeParser::ucharArrayToFloat(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES;
+      float yaw = multi_uav_map_construction::TypeParser::ucharArrayToFloat(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES;
 
       publishStatisticMessage0(searcherId, objectId, objectType, lat, lon, alt, yaw);
 
       // verify if can perform the task
-      if(multi_uav_se_mission::Arrays::contains(taskTypes, objectType)){
+      if(multi_uav_map_construction::Arrays::contains(taskTypes, objectType)){
 
         double distance = sqrt(pow((lat)-(d->parameters.position.global.latitude), 2)+pow((lon)-(d->parameters.position.global.longitude),2));
 
@@ -300,26 +300,26 @@ void communication(multi_uav_se_mission::CSerial *serial, multi_uav::Drone *d, s
 
         // start frame
         int8_t frameIdentification = -128;
-        msg1Frame.push_back(multi_uav_se_mission::TypeParser::int8tToUchar(frameIdentification));
+        msg1Frame.push_back(multi_uav_map_construction::TypeParser::int8tToUchar(frameIdentification));
 
         // message type
         int8_t messageType = 1;
-        msg1Frame.push_back(multi_uav_se_mission::TypeParser::int8tToUchar(messageType));
+        msg1Frame.push_back(multi_uav_map_construction::TypeParser::int8tToUchar(messageType));
 
         // searcher id
-        multi_uav_se_mission::Arrays::emplaceBack(msg1Frame, multi_uav_se_mission::TypeParser::intToUcharArray(searcherId));
+        multi_uav_map_construction::Arrays::emplaceBack(msg1Frame, multi_uav_map_construction::TypeParser::intToUcharArray(searcherId));
 
         // worker id
-        multi_uav_se_mission::Arrays::emplaceBack(msg1Frame, multi_uav_se_mission::TypeParser::intToUcharArray(d->parameters.id));
+        multi_uav_map_construction::Arrays::emplaceBack(msg1Frame, multi_uav_map_construction::TypeParser::intToUcharArray(d->parameters.id));
 
         // object id
-        multi_uav_se_mission::Arrays::emplaceBack(msg1Frame, multi_uav_se_mission::TypeParser::intToUcharArray(objectId));
+        multi_uav_map_construction::Arrays::emplaceBack(msg1Frame, multi_uav_map_construction::TypeParser::intToUcharArray(objectId));
 
         // object type
-        multi_uav_se_mission::Arrays::emplaceBack(msg1Frame, multi_uav_se_mission::TypeParser::intToUcharArray(objectType));
+        multi_uav_map_construction::Arrays::emplaceBack(msg1Frame, multi_uav_map_construction::TypeParser::intToUcharArray(objectType));
 
         // distance
-        multi_uav_se_mission::Arrays::emplaceBack(msg1Frame, multi_uav_se_mission::TypeParser::floatToUcharArray(distance));
+        multi_uav_map_construction::Arrays::emplaceBack(msg1Frame, multi_uav_map_construction::TypeParser::floatToUcharArray(distance));
 
         serial->writeDataInBlocks(msg1Frame);
 
@@ -371,24 +371,24 @@ void communication(multi_uav_se_mission::CSerial *serial, multi_uav::Drone *d, s
     else if((int) messageType == 1){
 
       //searcher id
-      int searcherId = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int searcherId = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //worker id
-      int workerId = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int workerId = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //object id
-      int objectId = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int objectId = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       //object type
-      int objectType = multi_uav_se_mission::TypeParser::ucharArrayToInt(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_INT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_INT_BYTES;
+      int objectType = multi_uav_map_construction::TypeParser::ucharArrayToInt(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_INT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_INT_BYTES;
 
       // distance
-      float distance = multi_uav_se_mission::TypeParser::ucharArrayToFloat(multi_uav_se_mission::Arrays::subvector(frame, i, multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES));
-      i += multi_uav_se_mission::TypeParser::SIZE_FLOAT_BYTES;
+      float distance = multi_uav_map_construction::TypeParser::ucharArrayToFloat(multi_uav_map_construction::Arrays::subvector(frame, i, multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES));
+      i += multi_uav_map_construction::TypeParser::SIZE_FLOAT_BYTES;
 
       publishStatisticMessage1(searcherId, workerId, objectId, objectType, distance, 0.0);
 
@@ -513,7 +513,7 @@ int main(int argc, char **argv){
     return 0;
   }
 
-  multi_uav_se_mission::CSerial *serial = new multi_uav_se_mission::CSerial();
+  multi_uav_map_construction::CSerial *serial = new multi_uav_map_construction::CSerial();
 
   std::stringstream ss1;
   ss1.precision(20);

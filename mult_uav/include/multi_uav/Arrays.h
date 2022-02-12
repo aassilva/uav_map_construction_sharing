@@ -1,14 +1,15 @@
 /*
 @author Maik Basso <maik@maikbasso.com.br>
+@Adapted by Antonio Silva <aassilva@inf.ufrgs.br>
 */
 
-#ifndef MULTI_UAV_SE_MISSION_ARRAYS_H
-#define MULTI_UAV_SE_MISSION_ARRAYS_H
+#ifndef MULTI_UAV_MAP_CONSTRUCTION_ARRAYS_H
+#define MULTI_UAV_MAP_CONSTRUCTION_ARRAYS_H
 
 #include <vector>
 #include <algorithm>
 
-namespace multi_uav_se_mission{
+namespace multi_uav_map_construction{
 
 class Arrays {
 
@@ -93,4 +94,4 @@ bool Arrays::contains(std::vector<T> vec, T value){
 
 }
 
-#endif // MULTI_UAV_SE_MISSION_ARRAYS_H
+#endif // MULTI_UAV_MAP_CONSTRUCTION_ARRAYS_H

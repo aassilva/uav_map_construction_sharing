@@ -11,7 +11,7 @@
         <!-- vehicle configs -->
         <arg name="ID" value="$(eval arg('numberUAVs') - 1)"/>
         <!-- PX4 SITL and vehicle spawn -->
-        <include file="$(find multi_uav_se_mission)/launch/environment/single_vehicle_spawn_sdf.launch">
+        <include file="$(find multi_uav_map_construction)/launch/environment/single_vehicle_spawn_sdf.launch">
             <arg name="x" value="1"/>
             <arg name="y" value="$(eval 0 + arg('numberUAVs'))"/>
             <arg name="z" value="0.05"/>
@@ -33,7 +33,7 @@
     </group>
 
     <!-- recursively start new UAV -->
-    <include file="$(find multi_uav_se_mission)/launch/environment/uav_recursive.launch" if="$(eval arg('numberUAVs') - 1 > 0)">
+    <include file="$(find multi_uav_map_construction)/launch/environment/uav_recursive.launch" if="$(eval arg('numberUAVs') - 1 > 0)">
         <arg name="numberUAVs" value="$(eval arg('numberUAVs') - 1)"/>
         <arg name="vehicle" value="$(arg vehicle)"/>
     </include>
