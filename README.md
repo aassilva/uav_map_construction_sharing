@@ -5,6 +5,7 @@
 
 The hardware architecture used in this work is available in the folder:
 >[uav_map_construction_sharing/mult_uav/](https://github.com/aassilva/uav_map_construction_sharing/tree/main/mult_uav)
+
 Figure 1 summarizes the main components of the system architecture developed for UAVs.
 
 >OMITTED - In revision process
@@ -13,6 +14,7 @@ Figure 1 summarizes the main components of the system architecture developed for
 
 On the edge server a software package is implemented is made available in the folder: 
 >[uav_map_construction_sharing/sever/](https://github.com/aassilva/uav_map_construction_sharing/tree/main/sever)
+
 Figure 2 presents an overview of the process performed by the server.
 
 >OMITTED - In revision process
