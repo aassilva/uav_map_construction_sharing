@@ -25,13 +25,13 @@ source ~/drone_simulator_ws/src/multi_uav_map_construction/scripts/start/simulat
 
 A ROS package for Multi UAV Simulation in Gazebo simulator.
 
-## Features
+### Features
 - Provide 3D simulation using Gazebo, ROS, MAVROS and PX4 firmware;
 - Include a ROS Node to control each UAV use simple MAVROS commands;
 - The UAV model was set up with a camera;
 - It is possible to visualize the UAV camera in RVIZ;
 
-## Installation
+### Installation
 Following the steps above you are able to perform a simple setup of a Multi UAV simulation.
 
 ### Install ROS
